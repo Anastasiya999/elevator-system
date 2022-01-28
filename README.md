@@ -37,7 +37,7 @@ The basic elevator system includes an elevator, logic controls and special butto
 
 In order to implement an elevator system I used a SCAN algorithm. It is a simple algorithm used in disk scheduling. 
 
-#### The main idea of algorithm
+#### The main idea of the algorithm
 1. Let our elevator system store three queue of tasks.``currentTasks`` array represents currently handled requests that are on the route path. The ``up`` array represents up requests that can not be served at the moment, the same with ``down`` array but in opposite direction. The values are unique and sorted in ascending order.
 2. If a user presses the "UP"/"DOWN" button the ``pickUp(direction,source)`` is trigged. Then the task is added to a dedicated queue depending on its direction and the source of request.
 3. If current direction of the elevator is "UP" and ``currentTasks`` is not empty it shifs and serves the first request from the queue. If direction is "DOWN" - pops and serves the last request from the queue.
