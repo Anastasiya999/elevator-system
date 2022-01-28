@@ -1,6 +1,7 @@
 # :book: Table of Content:
 
 - [About The Project](#project-description)
+- [Goals and Scenarios](#goals)
 - [Approach](#aproach)
 - [Project Structure](#project-structure)
 - [Technologies](#technologies)
@@ -13,15 +14,23 @@
 
 ## :pencil: About The Project
 
-The aim of this project is to simulate elevator system mechanizm. The system can simultenuasly process ay least 16 elevators. It allows to:
+The aim of this project is to simulate elevator system mechanizm. The system can simultaneously serve at least 16 lifts. It allows to:
 
-- Process pick up request
+- Process pick up requests
 - Update elevator's state
 - Simulate the lifting step
 - Choose a desired floor
 - Check the current state of the elevator: direction, floor and destination
 
+## :rocket: Goals and Scenarios
+
+The basic elevator system includes an elevator, logic controls and special buttons for sending requests. On every floor there are two buttons: "UP" and "DOWN" that represents desired direction. The elevator responds to the pressing of these buttons depending on depending on the current travel route. If it is idle, it will respond immediately to the floor of the user request.Moreover, the elevator always moves from bottom to top and only stops on other requests that are on its current path. When all requests are handled in one cycle direction, the elevator will reverse and begin serving other pending tasks. The user can choose the destination floor presssing dedicated buttons inside the lift.
+
+
 ## :rocket: Approach
+
+In order to implement an elevator system I have used a SCAN algorithm. It is 
+
 
 ## :file_folder: Project Structure
 
@@ -114,4 +123,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ![choosing](screenshots/status.png)
 
-### Adding an elevator
+
