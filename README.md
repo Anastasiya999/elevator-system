@@ -96,7 +96,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### Landing page
 
-![landing](screenshots/landing.png)
+![landing](screenshots/landing_page.png)
 
 ### Adding an elevator
 
