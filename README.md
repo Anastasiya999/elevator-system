@@ -33,7 +33,7 @@ The basic elevator system includes an elevator, logic controls and special butto
 * If the user refuses to select the a floor, the elevator will automatically close after 10 seconds and begin serving other requests
 
 
-## :rocket: Approach
+## :telescope: Approach
 
 In order to implement an elevator system I used a SCAN algorithm. It is a simple algorithm used in disk scheduling. 
 
