@@ -1,70 +1,117 @@
-# Getting Started with Create React App
+# :book: Table of Content:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- [About The Project](#project-description)
+- [Approach](#aproach)
+- [Project Structure](#project-structure)
+- [Technologies](#technologies)
+- [Getting Started](#getting-started)
+- [Landing page](#landing-page)
+- [Screenshots](#screenshots)
+- [Adding an elevator](#scenario1)
+- [Pick up request](#sc)
+-
 
-## Available Scripts
+## :pencil: About The Project
 
-In the project directory, you can run:
+The aim of this project is to simulate elevator system mechanizm. The system can simultenuasly process ay least 16 elevators. It allows to:
 
-### `npm start`
+- Process pick up request
+- Update elevator's state
+- Simulate the lifting step
+- Choose a desired floor
+- Check the current state of the elevator: direction, floor and destination
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## :rocket: Approach
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## :file_folder: Project Structure
 
-### `npm test`
+```bash
+│   App.js
+│   index.js
+│   reportWebVitals.js
+│
+├───assets
+│       background-system.png
+│       door.png
+│
+├───components
+│   ├───Controller
+│   │       Controller.js
+│   │       styles.js
+│   │
+│   ├───Elevator
+│   │       Elevator.js
+│   │       styles.js
+│   │
+│   ├───ElevatorSystem
+│   │       ElevatorSystem.js
+│   │       styles.js
+│   │
+│   ├───Floor
+│   │   │   Floor.js
+│   │   │   styles.js
+│   │   │
+│   │   └───Door
+│   │           Door.js
+│   │           styles.js
+│   │
+│   └───Header
+│       │   Header.js
+│       │   styles.js
+│       │
+│       └───AddButton
+│               AddButton.js
+│               styles.js
+│
+├───constants
+│       enums.js
+│
+├───hooks
+│       useDoorWorker.js
+│       useElevatorWorker.js
+│       useWebworker.js
+│
+└───themes
+        light.js
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## :computer: Technologies
 
-### `npm run build`
+- JavaScript, multithreading(web workers)
+- React.js, hooks
+- Material UI
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## :pushpin: Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+First of all download the project. Then in the project directory use the following command to start the application:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+  npm start
+```
 
-### `npm run eject`
+The app will be in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Screenshots
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Landing page
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![landing](screenshots/landing.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Adding an elevator
 
-## Learn More
+![adding](screenshots/add_elevator.png)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Pick up
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+![pickup](screenshots/pick_up.png)
 
-### Code Splitting
+### Choosing the floor
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+![choosing](screenshots/choosing_floor.png)
 
-### Analyzing the Bundle Size
+### Status display
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+![choosing](screenshots/status.png)
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Adding an elevator
