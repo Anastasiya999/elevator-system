@@ -24,13 +24,25 @@ The aim of this project is to simulate elevator system mechanizm. The system can
 
 ## :rocket: Goals and Scenarios
 
-The basic elevator system includes an elevator, logic controls and special buttons for sending requests. On every floor there are two buttons: "UP" and "DOWN" that represents desired direction. The elevator responds to the pressing of these buttons depending on depending on the current travel route. If it is idle, it will respond immediately to the floor of the user request.Moreover, the elevator always moves from bottom to top and only stops on other requests that are on its current path. When all requests are handled in one cycle direction, the elevator will reverse and begin serving other pending tasks. The user can choose the destination floor presssing dedicated buttons inside the lift.
+The basic elevator system includes an elevator, logic controls and special buttons for sending requests. On every floor there are two buttons: "UP" and "DOWN" that represents the desired direction. The elevator responds to the pressing of these buttons depending on the current travel route. If it is idle, it will respond immediately to the floor of the user request. Moreover, the elevator always moves from bottom to top and only stops on other requests that are on it's current path. When all requests are handled in one cycle direction, the elevator will reverse and begin serving other pending tasks. The user can choose the destination floor presssing dedicated buttons inside the lift.
+
+#### Some basic Scenarios
+* When a user presses UP or DOWN, the elevator will begin moving towards the source of request provided it matches it's current route, otherwise the requests will be added to the pending queue
+* When the elevator is idle, it responds immediately to requests
+* When there are several users inside the elevator with different disered locations the elevator will firstly served the one that is along it's path
+* If the user refuses to select the a floor, the elevator will automatically close after 10 seconds and begin serving other requests
 
 
 ## :rocket: Approach
 
-In order to implement an elevator system I have used a SCAN algorithm. It is 
+In order to implement an elevator system I used a SCAN algorithm. It is a simple algorithm used in disk scheduling. 
 
+#### Algorithm
+1. Let our elevator system store three queue of tasks.``currentTasks`` array represents currently handled requests that are on the route path. The ``up`` array represents up requests that can not be served at the moment, the same with ``down`` array but in opposite direction. The values are unique and sorted in ascending order.
+2. If a user presses "u"/"DOWN" button the ``pickUp(direction,source)`` is trigged. 
+3. 
+When implementing the SCAN algorithm, I considered the elevator system as a finite state machine. Depending on it's states: "UP", "DOWN", "IDLE", "MOVING", "STOPPED", "OPEN" or 
+"CLOSE" the elevator starts and responds to the user's requests. Thus, the change of state triggers the elevator behavior.
 
 ## :file_folder: Project Structure
 
