@@ -37,12 +37,17 @@ The basic elevator system includes an elevator, logic controls and special butto
 
 In order to implement an elevator system I used a SCAN algorithm. It is a simple algorithm used in disk scheduling.
 
-#### The main idea of the algorithm
+#### The main idea of algorithm
 
 1. Let our elevator system store three queue of tasks.`currentTasks` array represents currently handled requests that are on the route path. The `up` array represents up requests that can not be served at the moment, the same with `down` array but in opposite direction. The values are unique and sorted in ascending order.
 2. If a user presses the "UP"/"DOWN" button the `pickUp(direction,source)` is trigged. Then the task is added to a dedicated queue depending on its direction and the source of request.
 3. If current direction of the elevator is "UP" and `currentTasks` is not empty it shifs and serves the first request from the queue. If direction is "DOWN" - pops and serves the last request from the queue.
 4. If there are no jobs, the elevator will reverse direction and operate `up` or `down` queue due to the changed direction. If queues are empty the elevator changes its state to "IDLE".
+
+5. Let our elevator system store three queue of tasks.`currentTasks` array represents currently handled requests that are on the route path. The `up` array represents up requests that can not be served at the moment, the same with `down` array but in opposite direction. The values are unique and sorted in ascending order.
+6. If a user presses the "UP"/"DOWN" button the `pickUp(direction,source)` is trigged. Then the task is added to a dedicated queue depending on its direction and the source of request.
+7. If current direction of the elevator is "UP" and `currentTasks` is not empty it shifs and serves the first request from the queue. If direction is "DOWN" - pops and serves the last request from the queue.
+8. If there are no jobs, the elevator will reverse direction and operate `up` or `down` queue due to the changed direction. If queues are empty the elevator changes its state to "IDLE".
 
 When implementing the SCAN algorithm, I considered the elevator system as a finite state machine. Depending on it's states: "UP", "DOWN", "IDLE", "MOVING", "STOPPED", "OPEN" or
 "CLOSE" the elevator starts and responds to the user's requests. Thus, the change of state triggers the elevator behavior. Using the useState and useEffect hooks, I was able to get the proper rendering and the correct status display change. Besides I used useRef hook to store references to `up`, `down`, `tasks` and trigger re-rendering only when updating the state of the `current tasks` array. In order to process tasks simultaneously I use Web Workers. Every time `step(id, currentFloor, destinationFloor)` is called, a new elevator worker is created. The worker post the message with new `status` 10 000ms timeout and the state of `currentFloor` is updated. After sending the message the worker terminates.
