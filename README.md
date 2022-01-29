@@ -8,9 +8,6 @@
 - [Getting Started](#getting-started)
 - [Landing page](#landing-page)
 - [Screenshots](#screenshots)
-- [Adding an elevator](#scenario1)
-- [Pick up request](#sc)
--
 
 ## :pencil: About The Project
 
