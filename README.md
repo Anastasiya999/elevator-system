@@ -139,3 +139,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ### Status display
 
 ![choosing](screenshots/status.png)
+
+## Links
+
+- Demo URL: [https://brave-edison-d2dcad.netlify.app/](https://brave-edison-d2dcad.netlify.app/)
