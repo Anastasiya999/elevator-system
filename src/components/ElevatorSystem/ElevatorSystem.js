@@ -22,6 +22,7 @@ const ElevatorSystem = () => {
 
   const classes = useStyles();
   const [floor, setFloor] = useState(0);
+
   const [elevatorCount, setElevatorCount] = useState(0);
   const handleChange = (event) => {
     //pickup
@@ -33,7 +34,6 @@ const ElevatorSystem = () => {
       },
     });
     setFloor(event.target.value);
-    console.log("floor change", items);
   };
 
   const renderItem = (item) => {
@@ -60,6 +60,7 @@ const ElevatorSystem = () => {
             <MenuItem value={3}>3</MenuItem>
             <MenuItem value={4}>4</MenuItem>
           </Select>
+
           <List>
             <TransitionGroup className={classes.elevator_container} spacing={2}>
               {elevators.filter((item, index) => {

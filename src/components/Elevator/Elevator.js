@@ -21,6 +21,7 @@ const Elevator = ({ id }) => {
 
   useEffect(() => {
     if (elevatorInfo.state === STATE.MOVING) {
+      console.log(elevatorInfo);
       dispatch({
         type: "STEP",
         payload: {

@@ -39,6 +39,18 @@ const chceckAvalaible = (elevators, direction, destination) => {
   return chosen;
 };
 
+const addTask = (tasks, task) => {
+  let newTasks = [...tasks];
+  newTasks.push(task);
+  return Array.from(new Set(newTasks)).sort();
+};
+
+const removeTask = (tasks) => {
+  let newTasks = [...tasks];
+  newTasks.shift();
+  return newTasks;
+};
+
 export const elevatorReducer = (state = elevators, action) => {
   switch (action.type) {
     case PICK_UP: {
@@ -51,11 +63,17 @@ export const elevatorReducer = (state = elevators, action) => {
       return [
         ...state.map((item) => {
           if (item.id === chosen) {
+            if (state === "MOVING") {
+              return {
+                ...item,
+                tasks: addTask(item.tasks, destination),
+              };
+            }
             return {
               ...item,
-              destination,
               direction,
               state: "MOVING",
+              tasks: addTask(item.tasks, destination),
             };
           } else {
             return item;
@@ -69,10 +87,15 @@ export const elevatorReducer = (state = elevators, action) => {
       return [
         ...state.map((item) => {
           if (item.id === id) {
-            if (item.current !== item.destination) {
+            if (item.current !== item.tasks[0]) {
               return { ...item, current: item.current + 1 };
             } else {
-              return { ...item, state: "STOPPED" };
+              console.log("removing task from queue");
+              return {
+                ...item,
+                state: "STOPPED",
+                tasks: removeTask(item.tasks),
+              };
             }
           } else {
             return item;
@@ -97,7 +120,7 @@ export const elevatorReducer = (state = elevators, action) => {
       return [
         ...state.map((item) => {
           if (item.id === id) {
-            return { ...item, isOpen: false };
+            return { ...item, state: "MOVING", isOpen: false };
           } else {
             return item;
           }

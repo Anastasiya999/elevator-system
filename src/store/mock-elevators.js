@@ -6,6 +6,7 @@ export const elevators = [
     current: 0,
     destination: 0,
     isOpen: false,
+    tasks: [],
   },
   {
     id: 1,
@@ -14,6 +15,7 @@ export const elevators = [
     current: 0,
     destination: 0,
     isOpen: false,
+    tasks: [],
   },
   {
     id: 2,
@@ -22,5 +24,6 @@ export const elevators = [
     current: 0,
     destination: 0,
     isOpen: false,
+    tasks: [],
   },
 ];
