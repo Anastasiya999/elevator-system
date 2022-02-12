@@ -10,9 +10,52 @@ import { Paper } from "@material-ui/core";
 import KeyboardArrowUpSharpIcon from "@material-ui/icons/KeyboardArrowUpSharp";
 import KeyboardArrowDownSharpIcon from "@material-ui/icons/KeyboardArrowDownSharp";
 import { useElevatorWorker } from "../../hooks/useElevatorWorker";
+import { useDispatch, useSelector } from "react-redux";
 
 const Elevator = ({ id }) => {
-  const { status, currentFloor, error, step } = useElevatorWorker();
+  const dispatch = useDispatch();
+  const elevatorInfo = useSelector((state) => state.elevators[id]);
+  const [isOpen, setOpen] = useState(false);
+
+  const classes = useStyles();
+
+  useEffect(() => {
+    if (elevatorInfo.state === STATE.MOVING) {
+      dispatch({
+        type: "STEP",
+        payload: {
+          id: id,
+        },
+        meta: {
+          delayMs: 2000,
+        },
+      });
+    } else if (elevatorInfo.state === STATE.STOPPED && !elevatorInfo.isOpen) {
+      dispatch({
+        type: "OPEN_DOOR",
+        payload: {
+          id: id,
+        },
+      });
+    }
+  }, [elevatorInfo.state, elevatorInfo.current]);
+
+  const pickUp = () => {};
+  const close = () => {
+    console.log("closing");
+    dispatch({
+      type: "CLOSE_DOOR",
+      payload: {
+        id: id,
+      },
+    });
+  };
+  const renderDirection = () => {
+    if (elevatorInfo.direction < 0) return <KeyboardArrowDownSharpIcon />;
+    return <KeyboardArrowUpSharpIcon />;
+  };
+  /* const { status, currentFloor, error, step } = useElevatorWorker();
+  
 
   const [isOpen, setOpen] = useState(false);
   const [state, setState] = useState("IDLE");
@@ -194,7 +237,7 @@ const Elevator = ({ id }) => {
     } else {
       setState(STATE.IDLE);
     }
-  }, [currentTasks]);
+  }, [currentTasks, elevatorInfo]);
 
   useEffect(() => {
     if (state !== STATE.IDLE && !isOpen) {
@@ -207,13 +250,13 @@ const Elevator = ({ id }) => {
       return <KeyboardArrowDownSharpIcon />;
     return <KeyboardArrowUpSharpIcon />;
   };
-
+*/
   return (
     <Box className={classes.elevator}>
       <Paper className={classes.status_container} elevation={10}>
-        <Typography variant="h6">{status}</Typography>
+        <Typography variant="h6">{elevatorInfo.current}</Typography>
         <Typography variant="subtitle1" color="secondary">
-          {isOpen ? "Door is openned" : renderDirection()}
+          {elevatorInfo.isOpen ? "Door is openned" : renderDirection()}
         </Typography>
       </Paper>
 
@@ -221,7 +264,7 @@ const Elevator = ({ id }) => {
         number={5}
         pickUp={pickUp}
         close={close}
-        isCurrent={currentFloor}
+        isCurrent={elevatorInfo.current}
         isOpen={isOpen}
       />
       <Divider />
@@ -229,7 +272,7 @@ const Elevator = ({ id }) => {
         number={4}
         pickUp={pickUp}
         close={close}
-        isCurrent={currentFloor}
+        isCurrent={elevatorInfo.current}
         isOpen={isOpen}
       />
       <Divider />
@@ -237,7 +280,7 @@ const Elevator = ({ id }) => {
         number={3}
         pickUp={pickUp}
         close={close}
-        isCurrent={currentFloor}
+        isCurrent={elevatorInfo.current}
         isOpen={isOpen}
       />
       <Divider />
@@ -245,7 +288,7 @@ const Elevator = ({ id }) => {
         number={2}
         pickUp={pickUp}
         close={close}
-        isCurrent={currentFloor}
+        isCurrent={elevatorInfo.current}
         isOpen={isOpen}
       />
       <Divider />
@@ -253,7 +296,7 @@ const Elevator = ({ id }) => {
         number={1}
         pickUp={pickUp}
         close={close}
-        isCurrent={currentFloor}
+        isCurrent={elevatorInfo.current}
         isOpen={isOpen}
       />
       <Divider />
@@ -261,7 +304,7 @@ const Elevator = ({ id }) => {
         number={0}
         pickUp={pickUp}
         close={close}
-        isCurrent={currentFloor}
+        isCurrent={elevatorInfo.current}
         isOpen={isOpen}
       />
     </Box>

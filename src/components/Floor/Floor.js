@@ -19,7 +19,8 @@ export const Floor = ({ number, pickUp, close, isCurrent, isOpen }) => {
     requests.current.push(e.currentTarget.value);
   };
   const handleClose = () => {
-    close(requests.current);
+    //close(requests.current);
+    close();
     requests.current = [];
   };
 
@@ -42,7 +43,7 @@ export const Floor = ({ number, pickUp, close, isCurrent, isOpen }) => {
         <Paper elevation={1}>
           <Box className={classes.pickUp_container}>
             <IconButton
-              onClick={handlePickUp}
+              onClick={handleClose}
               value={1}
               aria-label="arrow-upward"
               size="medium"

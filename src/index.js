@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { rootReducer } from "./store/reducers";
+import { scheduler } from "./middleware/scheduler";
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(scheduler));
 
 ReactDOM.render(
   <React.StrictMode>
