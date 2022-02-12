@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 const Elevator = ({ id }) => {
   const dispatch = useDispatch();
   const elevatorInfo = useSelector((state) => state.elevators[id]);
-  const [isOpen, setOpen] = useState(false);
 
   const classes = useStyles();
 
@@ -28,7 +27,7 @@ const Elevator = ({ id }) => {
           id: id,
         },
         meta: {
-          delayMs: 2000,
+          delayMs: 1000,
         },
       });
     } else if (elevatorInfo.state === STATE.STOPPED && !elevatorInfo.isOpen) {
@@ -45,7 +44,7 @@ const Elevator = ({ id }) => {
             id: id,
           },
           meta: {
-            delayMs: 2000,
+            delayMs: 5000,
           },
         });
       }
@@ -54,7 +53,6 @@ const Elevator = ({ id }) => {
 
   const pickUp = () => {};
   const close = () => {
-    console.log("closing");
     dispatch({
       type: "CLOSE_DOOR",
       payload: {
@@ -277,7 +275,7 @@ const Elevator = ({ id }) => {
         pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
-        isOpen={isOpen}
+        isOpen={elevatorInfo.isOpen}
       />
       <Divider />
       <Floor
@@ -285,7 +283,7 @@ const Elevator = ({ id }) => {
         pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
-        isOpen={isOpen}
+        isOpen={elevatorInfo.isOpen}
       />
       <Divider />
       <Floor
@@ -293,7 +291,7 @@ const Elevator = ({ id }) => {
         pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
-        isOpen={isOpen}
+        isOpen={elevatorInfo.isOpen}
       />
       <Divider />
       <Floor
@@ -301,7 +299,7 @@ const Elevator = ({ id }) => {
         pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
-        isOpen={isOpen}
+        isOpen={elevatorInfo.isOpen}
       />
       <Divider />
       <Floor
@@ -309,7 +307,7 @@ const Elevator = ({ id }) => {
         pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
-        isOpen={isOpen}
+        isOpen={elevatorInfo.isOpen}
       />
       <Divider />
       <Floor
@@ -317,7 +315,7 @@ const Elevator = ({ id }) => {
         pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
-        isOpen={isOpen}
+        isOpen={elevatorInfo.isOpen}
       />
     </Box>
   );

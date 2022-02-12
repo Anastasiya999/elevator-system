@@ -7,14 +7,12 @@ import ArrowUpwardOutlined from "@material-ui/icons/ArrowUpwardOutlined";
 import ArrowDownwardRounded from "@material-ui/icons/ArrowDownwardRounded";
 import { useRef } from "react";
 import useStyles from "./styles";
+import { PickUpButton } from "../PickUpList/PickUpButton";
 
 export const Floor = ({ number, pickUp, close, isCurrent, isOpen }) => {
   const requests = useRef([]);
   const classes = useStyles();
 
-  const handlePickUp = (e) => {
-    pickUp(e.currentTarget.value, number);
-  };
   const handleClick = (e) => {
     requests.current.push(e.currentTarget.value);
   };
@@ -40,26 +38,7 @@ export const Floor = ({ number, pickUp, close, isCurrent, isOpen }) => {
         </Box>
       </Grid>
       <Grid item md={5}>
-        <Paper elevation={1}>
-          <Box className={classes.pickUp_container}>
-            <IconButton
-              onClick={handleClose}
-              value={1}
-              aria-label="arrow-upward"
-              size="medium"
-            >
-              <ArrowUpwardOutlined />
-            </IconButton>
-            <IconButton
-              onClick={handlePickUp}
-              value={-1}
-              aria-label="arrow-down"
-              size="medium"
-            >
-              <ArrowDownwardRounded />
-            </IconButton>
-          </Box>
-        </Paper>
+        <PickUpButton floor={number} />
       </Grid>
     </Grid>
   );
