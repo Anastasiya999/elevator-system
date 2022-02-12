@@ -14,11 +14,11 @@ export const Floor = ({ number, pickUp, close, isCurrent, isOpen }) => {
   const classes = useStyles();
 
   const handleClick = (e) => {
-    requests.current.push(e.currentTarget.value);
+    requests.current.push(+e.currentTarget.value);
   };
   const handleClose = () => {
-    //close(requests.current);
-    close();
+    close(requests.current);
+    //close();
     requests.current = [];
   };
 

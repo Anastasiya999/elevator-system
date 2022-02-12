@@ -1,5 +1,6 @@
 import { elevators } from "./mock-elevators";
 import {
+  ADD_TASKS,
   CLOSE_DOOR,
   OPEN_DOOR,
   PICK_UP,
@@ -47,7 +48,12 @@ const chceckAvalaible = (elevators, direction, destination) => {
 
 const addTask = (tasks, task) => {
   let newTasks = [...tasks];
-  newTasks.push(task);
+  if (task?.length) {
+    newTasks.push(...task);
+  } else {
+    newTasks.push(task);
+  }
+
   return Array.from(new Set(newTasks)).sort();
 };
 
@@ -149,6 +155,24 @@ export const elevatorReducer = (state = elevators, action) => {
         ...state.map((item) => {
           if (item.id === id) {
             return { ...item, state: "IDLE", isOpen: false };
+          } else {
+            return item;
+          }
+        }),
+      ];
+    }
+    case ADD_TASKS: {
+      const { id, requests } = action.payload;
+      console.log("adding tasks");
+      return [
+        ...state.map((item) => {
+          if (item.id === id) {
+            return {
+              ...item,
+              tasks: addTask(item.tasks, requests),
+              state: "MOVING",
+              isOpen: false,
+            };
           } else {
             return item;
           }

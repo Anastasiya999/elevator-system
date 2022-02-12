@@ -52,11 +52,12 @@ const Elevator = ({ id }) => {
   }, [elevatorInfo.state, elevatorInfo.current]);
 
   const pickUp = () => {};
-  const close = () => {
+  const close = (requests) => {
     dispatch({
-      type: "CLOSE_DOOR",
+      type: "ADD_TASKS",
       payload: {
         id: id,
+        requests: requests,
       },
     });
   };
