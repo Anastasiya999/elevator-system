@@ -4,7 +4,7 @@ export const elevators = [
     direction: 1,
     state: "IDLE",
     current: 0,
-    destination: 0,
+    destination: -2,
     isOpen: false,
     tasks: [],
   },

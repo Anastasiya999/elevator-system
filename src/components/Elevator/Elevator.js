@@ -30,26 +30,20 @@ const Elevator = ({ id }) => {
           delayMs: 1000,
         },
       });
-    } else if (elevatorInfo.state === STATE.STOPPED && !elevatorInfo.isOpen) {
+    }
+  }, [elevatorInfo.state, elevatorInfo.current]);
+
+  useEffect(() => {
+    if (elevatorInfo.tasks.length === 0 && elevatorInfo.state === "STOPPED") {
+      console.log("do sth");
       dispatch({
-        type: "OPEN_DOOR",
+        type: "SET_IDLE",
         payload: {
           id: id,
         },
       });
-      if (elevatorInfo.tasks.length === 0) {
-        dispatch({
-          type: "SET_IDLE",
-          payload: {
-            id: id,
-          },
-          meta: {
-            delayMs: 5000,
-          },
-        });
-      }
     }
-  }, [elevatorInfo.state, elevatorInfo.current]);
+  }, [elevatorInfo.tasks]);
 
   const pickUp = () => {};
   const close = (requests) => {

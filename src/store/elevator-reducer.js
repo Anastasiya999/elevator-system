@@ -48,11 +48,7 @@ const chceckAvalaible = (elevators, direction, destination) => {
 
 const addTask = (tasks, task) => {
   let newTasks = [...tasks];
-  if (task?.length) {
-    newTasks.push(...task);
-  } else {
-    newTasks.push(task);
-  }
+  newTasks.push(task);
 
   return Array.from(new Set(newTasks)).sort();
 };
@@ -67,6 +63,33 @@ const removeTask = (tasks, direction) => {
 
   return newTasks;
 };
+const addTasks = (tasks, requests) => {
+  let newTasks = [...tasks];
+  for (let i = 0; i < requests.length; i++) {
+    newTasks.push(requests[i]);
+  }
+  return Array.from(new Set(newTasks)).sort();
+};
+
+const isDirectionCorrect = (direction, currentFloor, tasks) => {
+  let isCorrect = true;
+  if (direction > 0) {
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i] < currentFloor) isCorrect = false;
+      else {
+        isCorrect = true;
+      }
+    }
+  } else {
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i] > currentFloor) isCorrect = false;
+      else {
+        isCorrect = true;
+      }
+    }
+  }
+  return isCorrect;
+};
 
 export const elevatorReducer = (state = elevators, action) => {
   switch (action.type) {
@@ -75,6 +98,7 @@ export const elevatorReducer = (state = elevators, action) => {
       //update destination for chosen elevator
       //return new array with elevators
       const { direction, destination } = action.payload;
+      console.log(direction, destination);
       let chosen = chceckAvalaible(state, direction, destination);
       return [
         ...state.map((item) => {
@@ -86,8 +110,10 @@ export const elevatorReducer = (state = elevators, action) => {
               };
             }
             //if state is IDLE change elevator direction to pick up direction
+            console.log("idle");
             return {
               ...item,
+              isOpen: false,
               direction,
               state: "MOVING",
               tasks: addTask(item.tasks, destination),
@@ -104,20 +130,47 @@ export const elevatorReducer = (state = elevators, action) => {
       return [
         ...state.map((item) => {
           if (item.id === id) {
-            if (item.current !== item.tasks[0] && item.tasks.length) {
-              if (item.current < item.tasks[0]) {
-                return { ...item, current: item.current + 1 };
+            if (item.direction > 0) {
+              if (item.current !== item.tasks[0] && item.tasks.length) {
+                console.log(item.current, item.tasks[0]);
+                if (item.current < item.tasks[0]) {
+                  console.log("+");
+                  return { ...item, current: item.current + 1 };
+                } else {
+                  return { ...item, current: item.current - 1 };
+                }
               } else {
-                return { ...item, current: item.current - 1 };
+                console.log("removing task from queue");
+
+                return {
+                  ...item,
+                  isOpen: true,
+                  state: "STOPPED",
+                  tasks: removeTask(item.tasks, item.direction),
+                };
               }
             } else {
-              console.log("removing task from queue");
+              if (
+                item.tasks.length &&
+                item.current !== item.tasks[item.tasks.length - 1]
+              ) {
+                console.log(item.current, item.tasks[0]);
+                if (item.current < item.tasks[0]) {
+                  console.log("+");
+                  return { ...item, current: item.current + 1 };
+                } else {
+                  return { ...item, current: item.current - 1 };
+                }
+              } else {
+                console.log("removing task from queue");
 
-              return {
-                ...item,
-                state: "STOPPED",
-                tasks: removeTask(item.tasks, item.direction),
-              };
+                return {
+                  ...item,
+                  isOpen: true,
+                  state: "STOPPED",
+                  tasks: removeTask(item.tasks, item.direction),
+                };
+              }
             }
           } else {
             return item;
@@ -142,7 +195,7 @@ export const elevatorReducer = (state = elevators, action) => {
       return [
         ...state.map((item) => {
           if (item.id === id) {
-            return { ...item, state: "MOVING", isOpen: false };
+            return { ...item, isOpen: false };
           } else {
             return item;
           }
@@ -154,7 +207,7 @@ export const elevatorReducer = (state = elevators, action) => {
       return [
         ...state.map((item) => {
           if (item.id === id) {
-            return { ...item, state: "IDLE", isOpen: false };
+            return { ...item, state: "IDLE" };
           } else {
             return item;
           }
@@ -163,13 +216,20 @@ export const elevatorReducer = (state = elevators, action) => {
     }
     case ADD_TASKS: {
       const { id, requests } = action.payload;
-      console.log("adding tasks");
+
       return [
         ...state.map((item) => {
           if (item.id === id) {
+            let newTasks = addTasks(item.tasks, requests);
+            let isDirCorrect = isDirectionCorrect(
+              item.direction,
+              item.current,
+              newTasks
+            );
             return {
               ...item,
-              tasks: addTask(item.tasks, requests),
+              direction: isDirCorrect ? item.direction : -item.direction,
+              tasks: newTasks,
               state: "MOVING",
               isOpen: false,
             };
