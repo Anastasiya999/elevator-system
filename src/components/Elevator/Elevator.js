@@ -38,6 +38,17 @@ const Elevator = ({ id }) => {
           id: id,
         },
       });
+      if (elevatorInfo.tasks.length === 0) {
+        dispatch({
+          type: "SET_IDLE",
+          payload: {
+            id: id,
+          },
+          meta: {
+            delayMs: 2000,
+          },
+        });
+      }
     }
   }, [elevatorInfo.state, elevatorInfo.current]);
 
