@@ -1,26 +1,17 @@
 import React from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
-import {
-  Grid,
-  Box,
-  Select,
-  MenuItem,
-  Divider,
-  Paper,
-  IconButton,
-} from "@material-ui/core";
+import { Grid, Box } from "@material-ui/core";
 import { TransitionGroup } from "react-transition-group";
 import { List } from "@material-ui/core";
-import { useState } from "react";
 import { Collapse } from "@material-ui/core";
 import { ListItem } from "@material-ui/core";
+import { PickUpPanelControl } from "../PickUpPanelControl/PickUpPanelControl";
 import Header from "../Header/Header";
 import Elevator from "../Elevator/Elevator";
-import useStyles from "./styles";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 
-import { PickUpPanelControl } from "../PickUpPanelControl/PickUpPanelControl";
+import useStyles from "./styles";
 
 const elevators = Array(16)
   .fill(0)
