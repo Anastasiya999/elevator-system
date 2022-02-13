@@ -69,7 +69,6 @@ const Elevator = ({ id }) => {
     }
   }, [elevatorInfo.tasks]);
 
-  const pickUp = () => {};
   const close = (requests) => {
     //add inner requests
     dispatch({
@@ -292,7 +291,6 @@ const Elevator = ({ id }) => {
 
       <Floor
         number={5}
-        pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
         isOpen={elevatorInfo.isOpen}
@@ -300,7 +298,6 @@ const Elevator = ({ id }) => {
       <Divider />
       <Floor
         number={4}
-        pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
         isOpen={elevatorInfo.isOpen}
@@ -308,7 +305,6 @@ const Elevator = ({ id }) => {
       <Divider />
       <Floor
         number={3}
-        pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
         isOpen={elevatorInfo.isOpen}
@@ -316,7 +312,6 @@ const Elevator = ({ id }) => {
       <Divider />
       <Floor
         number={2}
-        pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
         isOpen={elevatorInfo.isOpen}
@@ -324,7 +319,6 @@ const Elevator = ({ id }) => {
       <Divider />
       <Floor
         number={1}
-        pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
         isOpen={elevatorInfo.isOpen}
@@ -332,7 +326,6 @@ const Elevator = ({ id }) => {
       <Divider />
       <Floor
         number={0}
-        pickUp={pickUp}
         close={close}
         isCurrent={elevatorInfo.current}
         isOpen={elevatorInfo.isOpen}
