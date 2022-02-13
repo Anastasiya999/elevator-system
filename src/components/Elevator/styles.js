@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core";
 export default makeStyles(() => ({
   elevator: {
     border: "3px solid #8391AE",
-    minWidth: "220px",
+    minWidth: "150px",
     marginRight: "2%",
     marginBottom: "2%",
     backgroundColor: "rgba(131, 145, 174, 0.2)",

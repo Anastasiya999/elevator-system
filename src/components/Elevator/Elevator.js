@@ -50,7 +50,6 @@ const Elevator = ({ id }) => {
 
   useEffect(() => {
     if (elevatorInfo.tasks.length === 0) {
-      console.log("do sth", elevatorInfo.id);
       //check for pending tasks
       if (elevatorInfo.down.length || elevatorInfo.down.length) {
         dispatch({

@@ -1,13 +1,10 @@
 import React from "react";
 
 import Door from "./Door/Door";
-import { Grid, Box, Paper } from "@material-ui/core";
-import { IconButton } from "@material-ui/core";
-import ArrowUpwardOutlined from "@material-ui/icons/ArrowUpwardOutlined";
-import ArrowDownwardRounded from "@material-ui/icons/ArrowDownwardRounded";
+import { Grid, Box } from "@material-ui/core";
+
 import { useRef } from "react";
 import useStyles from "./styles";
-import { PickUpButton } from "../PickUpPanelControl/PickUpButton";
 
 export const Floor = ({ number, pickUp, close, isCurrent, isOpen }) => {
   const requests = useRef([]);
@@ -18,13 +15,12 @@ export const Floor = ({ number, pickUp, close, isCurrent, isOpen }) => {
   };
   const handleClose = () => {
     close(requests.current);
-    //close();
     requests.current = [];
   };
 
   return (
     <Grid container className={classes.floor_container}>
-      <Grid item md={5} xs={5}>
+      <Grid item md={8} xs={8}>
         <Box>
           <Box className={classes.floor}>
             {isCurrent === number && (
@@ -36,9 +32,6 @@ export const Floor = ({ number, pickUp, close, isCurrent, isOpen }) => {
             )}
           </Box>
         </Box>
-      </Grid>
-      <Grid item md={5}>
-        <PickUpButton floor={number} />
       </Grid>
     </Grid>
   );

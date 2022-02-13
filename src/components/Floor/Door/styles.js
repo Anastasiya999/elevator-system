@@ -7,6 +7,6 @@ export default makeStyles(() => ({
     backgroundSize: "cover",
     backgroundPosition: "center",
     height: "14vh",
-    maxWidth: "100px",
+    maxWidth: "120px",
   },
 }));

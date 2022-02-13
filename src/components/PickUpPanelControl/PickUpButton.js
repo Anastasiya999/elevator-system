@@ -12,6 +12,7 @@ export const PickUpButton = ({ floor }) => {
 
   const handlePickUp = (e) => {
     //add outer request
+
     dispatch({
       type: "PICK_UP",
       payload: {
