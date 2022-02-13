@@ -1,4 +1,5 @@
 import { elevators } from "./mock-elevators";
+import { STATE } from "../constants/enums";
 import {
   ADD_PENDING,
   ADD_TASKS,
@@ -17,7 +18,7 @@ const chceckAvalaible = (elevators, direction, destination) => {
   let up = false;
   let down = false;
   for (const item of elevators) {
-    if (item.state === "IDLE") {
+    if (item.state === STATE.IDLE) {
       diff = Math.abs(item.current - destination);
       if (diff < min) {
         min = diff;
@@ -152,12 +153,12 @@ export const elevatorReducer = (state = elevators, action) => {
               };
             } else {
               //case 1: idle
-              if (item.state === "IDLE") {
+              if (item.state === STATE.IDLE) {
                 return {
                   ...item,
                   isOpen: false,
                   direction,
-                  state: "MOVING",
+                  state: STATE.MOVING,
                   tasks: addTask(item.tasks, destination),
                 };
               }
@@ -201,7 +202,7 @@ export const elevatorReducer = (state = elevators, action) => {
                 return {
                   ...item,
                   isOpen: true,
-                  state: "STOPPED",
+                  state: STATE.STOPPED,
                   tasks: removeTask(item.tasks, item.direction),
                 };
               }
@@ -231,7 +232,7 @@ export const elevatorReducer = (state = elevators, action) => {
                 return {
                   ...item,
                   isOpen: true,
-                  state: "STOPPED",
+                  state: STATE.STOPPED,
                   tasks: removeTask(item.tasks, item.direction),
                 };
               }
@@ -259,7 +260,7 @@ export const elevatorReducer = (state = elevators, action) => {
       return [
         ...state.map((item) => {
           if (item.id === id) {
-            return { ...item, isOpen: false, state: "MOVING" };
+            return { ...item, isOpen: false, state: STATE.MOVING };
           } else {
             return item;
           }
@@ -272,7 +273,7 @@ export const elevatorReducer = (state = elevators, action) => {
       return [
         ...state.map((item) => {
           if (item.id === id && item.tasks.length === 0) {
-            return { ...item, state: "IDLE" };
+            return { ...item, state: STATE.IDLE };
           } else {
             return item;
           }
@@ -295,7 +296,7 @@ export const elevatorReducer = (state = elevators, action) => {
               up: [],
               down: [],
               tasks: newTasks,
-              state: "MOVING",
+              state: STATE.MOVING,
               isOpen: false,
             };
           } else {
@@ -320,7 +321,7 @@ export const elevatorReducer = (state = elevators, action) => {
               ...item,
               direction: isDirCorrect ? item.direction : -item.direction,
               tasks: newTasks,
-              state: "MOVING",
+              state: STATE.MOVING,
               isOpen: false,
             };
           } else {
