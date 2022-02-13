@@ -35,11 +35,11 @@ const Elevator = ({ id }) => {
       elevatorInfo.state === STATE.STOPPED &&
       elevatorInfo.tasks.length !== 0
     ) {
+      //close door automatically after delay
       dispatch({
-        type: "ADD_TASKS",
+        type: "CLOSE_DOOR",
         payload: {
           id: id,
-          requests: [],
         },
         meta: {
           delayMs: 5000,
@@ -51,6 +51,7 @@ const Elevator = ({ id }) => {
   useEffect(() => {
     if (elevatorInfo.tasks.length === 0) {
       console.log("do sth", elevatorInfo.id);
+      //check for pending tasks
       if (elevatorInfo.down.length || elevatorInfo.down.length) {
         dispatch({
           type: "ADD_PENDING",
@@ -71,6 +72,7 @@ const Elevator = ({ id }) => {
 
   const pickUp = () => {};
   const close = (requests) => {
+    //add inner requests
     dispatch({
       type: "ADD_TASKS",
       payload: {

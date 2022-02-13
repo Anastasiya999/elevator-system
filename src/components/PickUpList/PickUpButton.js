@@ -9,7 +9,9 @@ import { useDispatch } from "react-redux";
 export const PickUpButton = ({ floor }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+
   const handlePickUp = (e) => {
+    //add outer request
     dispatch({
       type: "PICK_UP",
       payload: {
