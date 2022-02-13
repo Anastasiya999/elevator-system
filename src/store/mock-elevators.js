@@ -4,9 +4,11 @@ export const elevators = [
     direction: 1,
     state: "IDLE",
     current: 0,
-    destination: -2,
+    destination: 0,
     isOpen: false,
     tasks: [],
+    up: [],
+    down: [],
   },
   {
     id: 1,
@@ -16,6 +18,8 @@ export const elevators = [
     destination: 0,
     isOpen: false,
     tasks: [],
+    up: [],
+    down: [],
   },
   {
     id: 2,
@@ -25,5 +29,7 @@ export const elevators = [
     destination: 0,
     isOpen: false,
     tasks: [],
+    up: [],
+    down: [],
   },
 ];

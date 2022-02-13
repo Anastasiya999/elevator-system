@@ -1,5 +1,6 @@
 import { elevators } from "./mock-elevators";
 import {
+  ADD_PENDING,
   ADD_TASKS,
   CLOSE_DOOR,
   OPEN_DOOR,
@@ -8,20 +9,37 @@ import {
   STEP,
 } from "./elevator-actions";
 
-const chceckAvalaible = (elevators, direction, destination) => {
-  let min = 10000;
+const chceckAvalaible2 = (elevators, direction, destination) => {
+  let min = 1000;
+
   let diff;
   let chosen = -1;
+  let temp;
+  let up = false;
+  let down = false;
   for (const item of elevators) {
+    if (item.state === "IDLE") {
+      diff = Math.abs(item.current - destination);
+      if (diff < min) {
+        min = diff;
+        chosen = item.id;
+      }
+    }
     if (item.direction === direction) {
       if (direction > 0) {
         if (item.current <= destination) {
-          //find the closest available elevator
           diff = Math.abs(item.current - destination);
 
           if (diff < min) {
             min = diff;
             chosen = item.id;
+          }
+        } else {
+          diff = item.current;
+          up = true;
+          if (diff < min) {
+            min = diff;
+            temp = item.id;
           }
         }
       } else {
@@ -30,8 +48,79 @@ const chceckAvalaible = (elevators, direction, destination) => {
 
           if (diff < min) {
             min = diff;
+            temp = item.id;
+          }
+        } else {
+          //can be in down queue
+          diff = 5 - item.current;
+          down = true;
+          if (diff < min) {
+            min = diff;
+            temp = item.id;
+          }
+        }
+      }
+    } else {
+      if (item.direction > 0) {
+        diff = 5 - item.current;
+        if (diff < min) {
+          min = diff;
+          temp = item.id;
+        }
+        down = true;
+      } else {
+        diff = item.current;
+        if (diff < min) {
+          min = diff;
+          temp = item.id;
+        }
+        up = true;
+      }
+    }
+  }
+  if (chosen === -1) {
+    return { chosen: temp, up: up, down: down };
+  } else {
+    return { chosen: chosen, up: false, down: false };
+  }
+};
+
+const chceckAvalaible = (elevators, direction, destination) => {
+  let min = 10000;
+  let diff;
+  let chosen = -1;
+
+  for (const item of elevators) {
+    if (item.direction === direction) {
+      if (item.state === "IDLE") {
+        diff = Math.abs(item.current - destination);
+        if (diff < min) {
+          min = diff;
+          chosen = item.id;
+        }
+      }
+      if (direction > 0) {
+        if (item.current <= destination && !item.isOpen) {
+          //find the closest available elevator
+          diff = Math.abs(item.current - destination);
+
+          if (diff < min) {
+            min = diff;
             chosen = item.id;
           }
+        } else {
+          //not available now
+        }
+      } else {
+        if (item.current >= destination && !item.isOpen) {
+          diff = Math.abs(item.current - destination);
+
+          if (diff < min) {
+            min = diff;
+            chosen = item.id;
+          }
+        } else {
+          //not available now
         }
       }
     } else {
@@ -88,7 +177,24 @@ const isDirectionCorrect = (direction, currentFloor, tasks) => {
   }
   return isCorrect;
 };
-
+const update = (elevator, destination) => {
+  if (elevator.tasks.length && elevator.current !== destination) {
+    console.log("step");
+    if (elevator.current < destination) {
+      return { ...elevator, current: elevator.current + 1 };
+    } else {
+      return { ...elevator, current: elevator.current - 1 };
+    }
+  } else {
+    console.log("removing task from queue");
+    return {
+      ...elevator,
+      isOpen: true,
+      state: "STOPPED",
+      tasks: removeTask(elevator.tasks, elevator.direction),
+    };
+  }
+};
 export const elevatorReducer = (state = elevators, action) => {
   switch (action.type) {
     case PICK_UP: {
@@ -96,27 +202,69 @@ export const elevatorReducer = (state = elevators, action) => {
       //update destination for chosen elevator
       //return new array with elevators
       const { direction, destination } = action.payload;
-      console.log(direction, destination);
+
       let chosen = chceckAvalaible(state, direction, destination);
-      console.log("chosen", chosen);
+      let elevator = chceckAvalaible2(state, direction, destination);
+      if (elevator.down || elevator.up) {
+        console.log(
+          "need to add to queue",
+          elevator.down,
+          elevator.up,
+          elevator.chosen
+        );
+      }
+      //if busy add task to queue: up or down
+
       return [
         ...state.map((item) => {
-          if (item.id === chosen) {
-            if (state === "MOVING") {
+          if (item.id === elevator.chosen) {
+            if (elevator.up) {
+              return {
+                ...item,
+                up: addTask(item.up, destination),
+              };
+            } else if (elevator.down) {
+              return {
+                ...item,
+                down: addTask(item.down, destination),
+              };
+            } else {
+              if (item.state === "IDLE") {
+                return {
+                  ...item,
+                  isOpen: false,
+                  direction,
+                  state: "MOVING",
+                  tasks: addTask(item.tasks, destination),
+                };
+              }
               return {
                 ...item,
                 tasks: addTask(item.tasks, destination),
               };
             }
-            //if state is IDLE change elevator direction to pick up direction
-            console.log("idle");
-            return {
-              ...item,
-              isOpen: false,
-              direction,
-              state: "MOVING",
-              tasks: addTask(item.tasks, destination),
-            };
+            /*
+            if (item.state === "MOVING") {
+              return {
+                ...item,
+                tasks: addTask(item.tasks, destination),
+              };
+            }
+            if (state === "STOPPED") {
+              console.log("adding to the up queue");
+            }
+           
+            if (item.state !== "STOPPED") {
+              return {
+                ...item,
+                isOpen: false,
+                direction,
+                state: "MOVING",
+                tasks: addTask(item.tasks, destination),
+              };
+            } else {
+              return item;
+            }*/
           } else {
             return item;
           }
@@ -130,17 +278,15 @@ export const elevatorReducer = (state = elevators, action) => {
         ...state.map((item) => {
           if (item.id === id) {
             if (item.direction > 0) {
-              if (item.current !== item.tasks[0] && item.tasks.length) {
-                console.log(item.current, item.tasks[0]);
+              if (item.tasks.length && item.current !== item.tasks[0]) {
+                console.log("step");
                 if (item.current < item.tasks[0]) {
-                  console.log("+");
                   return { ...item, current: item.current + 1 };
                 } else {
                   return { ...item, current: item.current - 1 };
                 }
               } else {
                 console.log("removing task from queue");
-
                 return {
                   ...item,
                   isOpen: true,
@@ -153,9 +299,8 @@ export const elevatorReducer = (state = elevators, action) => {
                 item.tasks.length &&
                 item.current !== item.tasks[item.tasks.length - 1]
               ) {
-                console.log(item.current, item.tasks[0]);
+                console.log("step");
                 if (item.current < item.tasks[0]) {
-                  console.log("+");
                   return { ...item, current: item.current + 1 };
                 } else {
                   return { ...item, current: item.current - 1 };
@@ -203,10 +348,36 @@ export const elevatorReducer = (state = elevators, action) => {
     }
     case SET_IDLE: {
       const { id } = action.payload;
+      console.log("idle");
+      return [
+        ...state.map((item) => {
+          if (item.id === id && item.tasks.length === 0) {
+            return { ...item, state: "IDLE" };
+          } else {
+            return item;
+          }
+        }),
+      ];
+    }
+    case ADD_PENDING: {
+      const { id } = action.payload;
       return [
         ...state.map((item) => {
           if (item.id === id) {
-            return { ...item, state: "IDLE" };
+            let newTasks;
+            if (item.down.length !== 0) {
+              newTasks = addTask(item.tasks, item.down);
+            } else {
+              newTasks = addTask(item.tasks, item.up);
+            }
+            return {
+              ...item,
+              up: [],
+              down: [],
+              tasks: newTasks,
+              state: "MOVING",
+              isOpen: false,
+            };
           } else {
             return item;
           }

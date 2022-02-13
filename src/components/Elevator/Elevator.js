@@ -31,17 +31,41 @@ const Elevator = ({ id }) => {
         },
       });
     }
+    if (
+      elevatorInfo.state === STATE.STOPPED &&
+      elevatorInfo.tasks.length !== 0
+    ) {
+      dispatch({
+        type: "ADD_TASKS",
+        payload: {
+          id: id,
+          requests: [],
+        },
+        meta: {
+          delayMs: 5000,
+        },
+      });
+    }
   }, [elevatorInfo.state, elevatorInfo.current]);
 
   useEffect(() => {
-    if (elevatorInfo.tasks.length === 0 && elevatorInfo.state === "STOPPED") {
-      console.log("do sth");
-      dispatch({
-        type: "SET_IDLE",
-        payload: {
-          id: id,
-        },
-      });
+    if (elevatorInfo.tasks.length === 0) {
+      console.log("do sth", elevatorInfo.id);
+      if (elevatorInfo.down.length || elevatorInfo.down.length) {
+        dispatch({
+          type: "ADD_PENDING",
+          payload: {
+            id: id,
+          },
+        });
+      } else {
+        dispatch({
+          type: "SET_IDLE",
+          payload: {
+            id: id,
+          },
+        });
+      }
     }
   }, [elevatorInfo.tasks]);
 
