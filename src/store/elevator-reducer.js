@@ -16,6 +16,7 @@ const chceckAvalaible = (elevators, direction, destination) => {
     if (item.direction === direction) {
       if (direction > 0) {
         if (item.current <= destination) {
+          //find the closest available elevator
           diff = Math.abs(item.current - destination);
 
           if (diff < min) {
@@ -48,7 +49,11 @@ const chceckAvalaible = (elevators, direction, destination) => {
 
 const addTask = (tasks, task) => {
   let newTasks = [...tasks];
-  newTasks.push(task);
+  if (Array.isArray(task)) {
+    newTasks.push(...task);
+  } else {
+    newTasks.push(task);
+  }
 
   return Array.from(new Set(newTasks)).sort();
 };
@@ -62,13 +67,6 @@ const removeTask = (tasks, direction) => {
   }
 
   return newTasks;
-};
-const addTasks = (tasks, requests) => {
-  let newTasks = [...tasks];
-  for (let i = 0; i < requests.length; i++) {
-    newTasks.push(requests[i]);
-  }
-  return Array.from(new Set(newTasks)).sort();
 };
 
 const isDirectionCorrect = (direction, currentFloor, tasks) => {
@@ -100,6 +98,7 @@ export const elevatorReducer = (state = elevators, action) => {
       const { direction, destination } = action.payload;
       console.log(direction, destination);
       let chosen = chceckAvalaible(state, direction, destination);
+      console.log("chosen", chosen);
       return [
         ...state.map((item) => {
           if (item.id === chosen) {
@@ -220,7 +219,7 @@ export const elevatorReducer = (state = elevators, action) => {
       return [
         ...state.map((item) => {
           if (item.id === id) {
-            let newTasks = addTasks(item.tasks, requests);
+            let newTasks = addTask(item.tasks, requests);
             let isDirCorrect = isDirectionCorrect(
               item.direction,
               item.current,
