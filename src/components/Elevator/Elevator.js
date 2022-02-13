@@ -94,7 +94,14 @@ const Elevator = ({ id }) => {
   return (
     <Box className={classes.elevator}>
       <Paper className={classes.status_container} elevation={10}>
-        <Typography variant="h6">{elevatorInfo.current}</Typography>
+        <Typography variant="h6">
+          {"Elevator " +
+            elevatorInfo.id +
+            " is on " +
+            elevatorInfo.current +
+            "-" +
+            elevatorInfo.destination}
+        </Typography>
         <Typography variant="subtitle1" color="secondary">
           {elevatorInfo.isOpen ? "Door is openned" : renderDirection()}
         </Typography>

@@ -184,9 +184,17 @@ export const elevatorReducer = (state = elevators, action) => {
               if (item.tasks.length && item.current !== item.tasks[0]) {
                 console.log("step");
                 if (item.current < item.tasks[0]) {
-                  return { ...item, current: item.current + 1 };
+                  return {
+                    ...item,
+                    current: item.current + 1,
+                    destination: item.tasks[0],
+                  };
                 } else {
-                  return { ...item, current: item.current - 1 };
+                  return {
+                    ...item,
+                    current: item.current - 1,
+                    destination: item.tasks[0],
+                  };
                 }
               } else {
                 console.log("removing task from queue");
@@ -205,9 +213,17 @@ export const elevatorReducer = (state = elevators, action) => {
               ) {
                 console.log("step");
                 if (item.current < item.tasks[0]) {
-                  return { ...item, current: item.current + 1 };
+                  return {
+                    ...item,
+                    current: item.current + 1,
+                    destination: item.tasks[item.tasks.length - 1],
+                  };
                 } else {
-                  return { ...item, current: item.current - 1 };
+                  return {
+                    ...item,
+                    current: item.current - 1,
+                    destination: item.tasks[item.tasks.length - 1],
+                  };
                 }
               } else {
                 console.log("removing task from queue");

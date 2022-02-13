@@ -11,7 +11,7 @@
 
 ## :pencil: About The Project
 
-The aim of this project is to simulate elevator system mechanizm. The system can simultaneously serve at least 16 lifts. It allows to:
+The aim of this project is to simulate elevator system mechanism. The system can simultaneously serve at least 16 lifts. It allows to:
 
 - Process pick up requests
 - Update elevator's state
@@ -21,7 +21,7 @@ The aim of this project is to simulate elevator system mechanizm. The system can
 
 ## :rocket: Goals and Scenarios
 
-The basic elevator system includes an elevator, logic controls and special buttons for sending requests. On every floor there are two buttons: "UP" and "DOWN" that represents the desired direction. The elevator responds to the pressing of these buttons depending on the current travel route. If it is idle, it will respond immediately to the floor of the user request. Moreover, the elevator always moves from bottom to top and only stops on other requests that are on it's current path. When all requests are handled in one cycle direction, the elevator will reverse and begin serving other pending tasks. The user can choose the destination floor presssing dedicated buttons inside the lift.
+The basic elevator system includes an elevator, logic controls and special buttons for sending requests. On every floor there are two buttons: "UP" and "DOWN" that represents the desired direction. The elevator responds to the pressing of these buttons depending on the current travel route. If it is idle, it will respond immediately to the floor of the user request. Moreover, the elevator always moves from bottom to top and only stops in response to requests that are on it's current path. When all requests are handled in one cycle direction, the elevator will reverse and begin serving other pending tasks. The user can choose the destination floor presssing dedicated buttons inside the lift.
 
 #### Some basic Scenarios
 
@@ -97,6 +97,7 @@ When implementing the SCAN algorithm, I considered the elevator system as a fini
 ## :computer: Technologies
 
 - JavaScript, multithreading(web workers)
+- Redux
 - React.js, hooks
 - Material UI
 
