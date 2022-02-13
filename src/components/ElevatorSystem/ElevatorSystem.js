@@ -20,7 +20,7 @@ import useStyles from "./styles";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-import { PickUpList } from "../PickUpList/PickUpList";
+import { PickUpPanelControl } from "../PickUpPanelControl/PickUpPanelControl";
 
 const elevators = Array(16)
   .fill(0)
@@ -28,7 +28,6 @@ const elevators = Array(16)
 
 const ElevatorSystem = () => {
   const items = useSelector((state) => state.elevators);
-  const dispatch = useDispatch();
 
   const classes = useStyles();
 
@@ -49,7 +48,7 @@ const ElevatorSystem = () => {
         <Box>
           <List>
             <TransitionGroup className={classes.elevator_container} spacing={2}>
-              <PickUpList />
+              <PickUpPanelControl />
               {elevators.filter((item, index) => {
                 if (index < elevatorCount)
                   return (

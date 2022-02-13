@@ -5,7 +5,7 @@ import React from "react";
 import useStyles from "./styles";
 import { PickUpButton } from "./PickUpButton";
 
-export const PickUpList = () => {
+export const PickUpPanelControl = () => {
   const classes = useStyles();
   return (
     <Grid container className={classes.pickUp_list}>

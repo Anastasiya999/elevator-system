@@ -7,7 +7,7 @@ import ArrowUpwardOutlined from "@material-ui/icons/ArrowUpwardOutlined";
 import ArrowDownwardRounded from "@material-ui/icons/ArrowDownwardRounded";
 import { useRef } from "react";
 import useStyles from "./styles";
-import { PickUpButton } from "../PickUpList/PickUpButton";
+import { PickUpButton } from "../PickUpPanelControl/PickUpButton";
 
 export const Floor = ({ number, pickUp, close, isCurrent, isOpen }) => {
   const requests = useRef([]);
