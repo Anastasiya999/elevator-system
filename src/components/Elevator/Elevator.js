@@ -6,10 +6,10 @@ import { Floor } from "../Floor/Floor";
 import { Box, Divider, Typography } from "@material-ui/core";
 import useStyles from "./styles";
 import { Paper } from "@material-ui/core";
+import { arrayWithFloorNumbers } from "../../store/mock-floors";
 
 import KeyboardArrowUpSharpIcon from "@material-ui/icons/KeyboardArrowUpSharp";
 import KeyboardArrowDownSharpIcon from "@material-ui/icons/KeyboardArrowDownSharp";
-import { useElevatorWorker } from "../../hooks/useElevatorWorker";
 import { useDispatch, useSelector } from "react-redux";
 
 const Elevator = ({ id }) => {
