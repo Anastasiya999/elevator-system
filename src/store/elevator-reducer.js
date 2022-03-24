@@ -1,5 +1,14 @@
 import { elevators } from "./mock-elevators";
 import { STATE } from "../constants/enums";
+import { DIRECTION } from "../constants/enums";
+import {
+  chceckAvalaible,
+  addTask,
+  removeTask,
+  moveUp,
+  moveDown,
+  isDirectionCorrect,
+} from "./helpers";
 import {
   ADD_PENDING,
   ADD_TASKS,
@@ -10,134 +19,27 @@ import {
   STEP,
 } from "./elevator-actions";
 
-const chceckAvalaible = (elevators, direction, destination) => {
-  let min = 1000;
-  let diff;
-  let chosen = -1;
-  let temp;
-  let up = false;
-  let down = false;
-  for (const item of elevators) {
-    if (item.state === STATE.IDLE) {
-      diff = Math.abs(item.current - destination);
-      if (diff < min) {
-        min = diff;
-        chosen = item.id;
-      }
-    }
-    if (item.direction === direction) {
-      if (direction > 0) {
-        //chceck if request along the path
-        if (item.current <= destination) {
-          diff = Math.abs(item.current - destination);
-
-          if (diff < min) {
-            min = diff;
-            chosen = item.id;
-          }
-        } else {
-          //flag pending up requests
-          diff = item.current;
-          up = true;
-          if (diff < min) {
-            min = diff;
-            temp = item.id;
-          }
-        }
-      } else {
-        //chceck if request along the path
-        if (item.current >= destination) {
-          diff = Math.abs(item.current - destination);
-
-          if (diff < min) {
-            min = diff;
-            temp = item.id;
-          }
-        } else {
-          //flag pending down requests
-          diff = 5 - item.current;
-          down = true;
-          if (diff < min) {
-            min = diff;
-            temp = item.id;
-          }
-        }
-      }
-    } else {
-      if (item.direction > 0) {
-        //flag pending down requests
-        diff = 5 - item.current;
-        if (diff < min) {
-          min = diff;
-          temp = item.id;
-        }
-        down = true;
-      } else {
-        //flag pending up requests
-        diff = item.current;
-        if (diff < min) {
-          min = diff;
-          temp = item.id;
-        }
-        up = true;
-      }
-    }
-  }
-  if (chosen === -1) {
-    return { chosen: temp, up: up, down: down };
-  } else {
-    return { chosen: chosen, up: false, down: false };
-  }
-};
-
-const addTask = (tasks, task) => {
-  let newTasks = [...tasks];
-  if (Array.isArray(task)) {
-    newTasks.push(...task);
-  } else {
-    newTasks.push(task);
-  }
-
-  return Array.from(new Set(newTasks)).sort();
-};
-
-const removeTask = (tasks, direction) => {
-  let newTasks = [...tasks];
-  if (direction > 0) {
-    newTasks.shift();
-  } else {
-    newTasks.pop();
-  }
-
-  return newTasks;
-};
-
-const isDirectionCorrect = (direction, currentFloor, tasks) => {
-  let isCorrect = true;
-  if (direction > 0) {
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i] < currentFloor) isCorrect = false;
-      else {
-        isCorrect = true;
-      }
-    }
-  } else {
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i] > currentFloor) isCorrect = false;
-      else {
-        isCorrect = true;
-      }
-    }
-  }
-  return isCorrect;
-};
-
 export const elevatorReducer = (state = elevators, action) => {
   switch (action.type) {
     case PICK_UP: {
       const { direction, destination } = action.payload;
       let elevator = chceckAvalaible(state, direction, destination);
       return [
+        ...state.map((item) => {
+          if (item.id == elevator) {
+            return {
+              ...item,
+              isOpen: false,
+              direction,
+              state: STATE.MOVING,
+              tasks: addTask(item.tasks, destination),
+            };
+          } else {
+            return item;
+          }
+        }),
+      ];
+      /*return [
         ...state.map((item) => {
           if (item.id === elevator.chosen) {
             //case 1: busy
@@ -172,83 +74,99 @@ export const elevatorReducer = (state = elevators, action) => {
             return item;
           }
         }),
-      ];
+      ];*/
     }
 
     case STEP: {
       const { id } = action.payload;
+      let destination, new_floor;
       return [
         ...state.map((item) => {
           if (item.id === id) {
-            //up direction: get first task from queue
-            if (item.direction > 0) {
-              if (item.tasks.length && item.current !== item.tasks[0]) {
-                console.log("step");
-                if (item.current < item.tasks[0]) {
-                  return {
-                    ...item,
-                    current: item.current + 1,
-                    destination: item.tasks[0],
-                  };
-                } else {
-                  return {
-                    ...item,
-                    current: item.current - 1,
-                    destination: item.tasks[0],
-                  };
-                }
-              } else {
-                console.log("removing task from queue");
-                return {
-                  ...item,
-                  isOpen: true,
-                  state: STATE.STOPPED,
-                  tasks: removeTask(item.tasks, item.direction),
-                };
-              }
-              //doen direction: get last task from queue
+            if (item.direction === DIRECTION.UP) {
+              destination = item.tasks[0];
             } else {
-              if (
-                item.tasks.length &&
-                item.current !== item.tasks[item.tasks.length - 1]
-              ) {
-                console.log("step");
-                if (item.current < item.tasks[0]) {
-                  return {
-                    ...item,
-                    current: item.current + 1,
-                    destination: item.tasks[item.tasks.length - 1],
-                  };
-                } else {
-                  return {
-                    ...item,
-                    current: item.current - 1,
-                    destination: item.tasks[item.tasks.length - 1],
-                  };
-                }
-              } else {
-                console.log("removing task from queue");
-
-                return {
-                  ...item,
-                  isOpen: true,
-                  state: STATE.STOPPED,
-                  tasks: removeTask(item.tasks, item.direction),
-                };
-              }
+              destination = item.tasks[item.tasks.length - 1];
             }
-          } else {
-            return item;
-          }
-        }),
-      ];
-    }
-    case OPEN_DOOR: {
-      const { id } = action.payload;
-      return [
-        ...state.map((item) => {
-          if (item.id === id) {
-            return { ...item, isOpen: true };
+
+            if (item.current < destination) {
+              new_floor = moveUp(item);
+            } else {
+              new_floor = moveDown(item);
+            }
+
+            if (item.current === destination) {
+              return {
+                ...item,
+                isOpen: true,
+                state: STATE.STOPPED,
+                tasks: removeTask(item.tasks, item.direction),
+              };
+            } else {
+              return {
+                ...item,
+                current: new_floor,
+                destination: destination,
+              };
+            }
+
+            // //up direction: get first task from queue
+            // if (item.direction > 0) {
+            //   if (item.tasks.length && item.current !== item.tasks[0]) {
+            //     console.log("step");
+            //     if (item.current < item.tasks[0]) {
+            //       return {
+            //         ...item,
+            //         current: item.current + 1,
+            //         destination: item.tasks[0],
+            //       };
+            //     } else {
+            //       return {
+            //         ...item,
+            //         current: item.current - 1,
+            //         destination: item.tasks[0],
+            //       };
+            //     }
+            //   } else {
+            //     console.log("removing task from queue");
+            //     return {
+            //       ...item,
+            //       isOpen: true,
+            //       state: STATE.STOPPED,
+            //       tasks: removeTask(item.tasks, item.direction),
+            //     };
+            //   }
+            //   //doen direction: get last task from queue
+            // } else {
+            //   if (
+            //     item.tasks.length &&
+            //     item.current !== item.tasks[item.tasks.length - 1]
+            //   ) {
+            //     console.log("step");
+            //     if (item.current < item.tasks[0]) {
+            //       return {
+            //         ...item,
+            //         current: item.current + 1,
+            //         destination: item.tasks[item.tasks.length - 1],
+            //       };
+            //     } else {
+            //       return {
+            //         ...item,
+            //         current: item.current - 1,
+            //         destination: item.tasks[item.tasks.length - 1],
+            //       };
+            //     }
+            //   } else {
+            //     console.log("removing task from queue");
+
+            //     return {
+            //       ...item,
+            //       isOpen: true,
+            //       state: STATE.STOPPED,
+            //       tasks: removeTask(item.tasks, item.direction),
+            //     };
+            //   }
+            // }
           } else {
             return item;
           }
@@ -269,36 +187,11 @@ export const elevatorReducer = (state = elevators, action) => {
     }
     case SET_IDLE: {
       const { id } = action.payload;
-      console.log("idle");
+
       return [
         ...state.map((item) => {
           if (item.id === id && item.tasks.length === 0) {
             return { ...item, state: STATE.IDLE };
-          } else {
-            return item;
-          }
-        }),
-      ];
-    }
-    case ADD_PENDING: {
-      const { id } = action.payload;
-      return [
-        ...state.map((item) => {
-          if (item.id === id) {
-            let newTasks;
-            if (item.down.length !== 0) {
-              newTasks = addTask(item.tasks, item.down);
-            } else {
-              newTasks = addTask(item.tasks, item.up);
-            }
-            return {
-              ...item,
-              up: [],
-              down: [],
-              tasks: newTasks,
-              state: STATE.MOVING,
-              isOpen: false,
-            };
           } else {
             return item;
           }
@@ -320,6 +213,43 @@ export const elevatorReducer = (state = elevators, action) => {
             return {
               ...item,
               direction: isDirCorrect ? item.direction : -item.direction,
+              tasks: newTasks,
+              state: STATE.MOVING,
+              isOpen: false,
+            };
+          } else {
+            return item;
+          }
+        }),
+      ];
+    }
+    case OPEN_DOOR: {
+      const { id } = action.payload;
+      return [
+        ...state.map((item) => {
+          if (item.id === id) {
+            return { ...item, isOpen: true };
+          } else {
+            return item;
+          }
+        }),
+      ];
+    }
+    case ADD_PENDING: {
+      const { id } = action.payload;
+      return [
+        ...state.map((item) => {
+          if (item.id === id) {
+            let newTasks;
+            if (item.down.length !== 0) {
+              newTasks = addTask(item.tasks, item.down);
+            } else {
+              newTasks = addTask(item.tasks, item.up);
+            }
+            return {
+              ...item,
+              up: [],
+              down: [],
               tasks: newTasks,
               state: STATE.MOVING,
               isOpen: false,

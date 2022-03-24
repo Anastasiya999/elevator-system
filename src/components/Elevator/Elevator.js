@@ -27,7 +27,6 @@ const Elevator = ({ id }) => {
 
   useEffect(() => {
     if (elevatorInfo.state === STATE.MOVING) {
-      console.log(elevatorInfo);
       dispatch({
         type: STEP,
         payload: {
@@ -57,24 +56,41 @@ const Elevator = ({ id }) => {
 
   useEffect(() => {
     if (elevatorInfo.tasks.length === 0) {
-      //check for pending tasks
-      if (elevatorInfo.down.length || elevatorInfo.down.length) {
-        dispatch({
-          type: ADD_PENDING,
-          payload: {
-            id: id,
-          },
-        });
-      } else {
-        dispatch({
-          type: SET_IDLE,
-          payload: {
-            id: id,
-          },
-        });
-      }
+      dispatch({
+        type: SET_IDLE,
+        payload: {
+          id: id,
+        },
+        meta: {
+          delayMs: 5000,
+        },
+      });
     }
   }, [elevatorInfo.tasks]);
+
+  // useEffect(() => {
+  //   if (elevatorInfo.tasks.length === 0) {
+  //     //check for pending tasks
+  //     if (elevatorInfo.down.length || elevatorInfo.up.length) {
+  //       dispatch({
+  //         type: ADD_PENDING,
+  //         payload: {
+  //           id: id,
+  //         },
+  //       });
+  //     } else {
+  //       dispatch({
+  //         type: SET_IDLE,
+  //         payload: {
+  //           id: id,
+  //         },
+  //         meta: {
+  //           delayMs: 5000,
+  //         },
+  //       });
+  //     }
+  //   }
+  // }, [elevatorInfo.tasks]);
 
   const close = (requests) => {
     //add inner requests
