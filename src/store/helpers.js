@@ -94,7 +94,7 @@ export const addTask = (tasks, task) => {
     newTasks.push(task);
   }
 
-  return Array.from(new Set(newTasks)).sort();
+  return Array.from(new Set(newTasks)).sort((a, b) => a - b);
 };
 
 export const removeTask = (tasks, direction) => {

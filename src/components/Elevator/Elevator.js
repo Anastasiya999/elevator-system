@@ -68,6 +68,22 @@ const Elevator = ({ id }) => {
     }
   }, [elevatorInfo.tasks]);
 
+  const close = (requests) => {
+    //add inner requests
+    dispatch({
+      type: ADD_TASKS,
+      payload: {
+        id: id,
+        requests: requests,
+      },
+    });
+  };
+
+  const renderDirection = () => {
+    if (elevatorInfo.direction < 0) return <KeyboardArrowDownSharpIcon />;
+    return <KeyboardArrowUpSharpIcon />;
+  };
+
   // useEffect(() => {
   //   if (elevatorInfo.tasks.length === 0) {
   //     //check for pending tasks
@@ -91,21 +107,6 @@ const Elevator = ({ id }) => {
   //     }
   //   }
   // }, [elevatorInfo.tasks]);
-
-  const close = (requests) => {
-    //add inner requests
-    dispatch({
-      type: ADD_TASKS,
-      payload: {
-        id: id,
-        requests: requests,
-      },
-    });
-  };
-  const renderDirection = () => {
-    if (elevatorInfo.direction < 0) return <KeyboardArrowDownSharpIcon />;
-    return <KeyboardArrowUpSharpIcon />;
-  };
 
   return (
     <Box className={classes.elevator}>

@@ -6,7 +6,7 @@ import { Grid, Box } from "@material-ui/core";
 import { useRef } from "react";
 import useStyles from "./styles";
 
-export const Floor = ({ number, close, isCurrent, isOpen }) => {
+export const Floor = ({ number, close, isCurrent, isOpen, key }) => {
   const requests = useRef([]);
   const classes = useStyles();
 

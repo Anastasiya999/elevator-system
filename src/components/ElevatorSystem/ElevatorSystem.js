@@ -18,7 +18,7 @@ const elevators = Array(16)
   .map((item, index) => <Elevator id={index} />);
 
 const ElevatorSystem = () => {
-  const items = useSelector((state) => state.elevators);
+  //const items = useSelector((state) => state.elevators);
 
   const classes = useStyles();
 
