@@ -17,6 +17,13 @@ import {
   CLOSE_DOOR,
 } from "../../constants/action-types";
 
+import {
+  doAddTasks,
+  doCloseDoor,
+  doSetIdle,
+  doStep,
+} from "../../actions/elevator";
+
 import useStyles from "./styles";
 
 const Elevator = ({ id }) => {
@@ -27,56 +34,26 @@ const Elevator = ({ id }) => {
 
   useEffect(() => {
     if (elevatorInfo.state === STATE.MOVING) {
-      dispatch({
-        type: STEP,
-        payload: {
-          id: id,
-        },
-        meta: {
-          delayMs: 1000,
-        },
-      });
+      dispatch(doStep(id, 1000));
     }
     if (
       elevatorInfo.state === STATE.STOPPED &&
       elevatorInfo.tasks.length !== 0
     ) {
       //close door automatically after delay
-      dispatch({
-        type: CLOSE_DOOR,
-        payload: {
-          id: id,
-        },
-        meta: {
-          delayMs: 5000,
-        },
-      });
+      dispatch(doCloseDoor(id, 5000));
     }
   }, [elevatorInfo.state, elevatorInfo.current]);
 
   useEffect(() => {
     if (elevatorInfo.tasks.length === 0) {
-      dispatch({
-        type: SET_IDLE,
-        payload: {
-          id: id,
-        },
-        meta: {
-          delayMs: 5000,
-        },
-      });
+      dispatch(doSetIdle(id, 5000));
     }
   }, [elevatorInfo.tasks]);
 
   const close = (requests) => {
     //add inner requests
-    dispatch({
-      type: ADD_TASKS,
-      payload: {
-        id: id,
-        requests: requests,
-      },
-    });
+    dispatch(doAddTasks(id, requests));
   };
 
   const renderDirection = () => {
