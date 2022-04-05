@@ -17,7 +17,7 @@ import {
   PICK_UP,
   SET_IDLE,
   STEP,
-} from "./elevator-actions";
+} from "../constants/action-types";
 
 const applyPickUpTasks = (state, action) => {
   const { direction, destination } = action.payload;

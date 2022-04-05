@@ -15,7 +15,7 @@ import {
   ADD_PENDING,
   ADD_TASKS,
   CLOSE_DOOR,
-} from "../../store/elevator-actions";
+} from "../../constants/action-types";
 
 import useStyles from "./styles";
 
